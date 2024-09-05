@@ -24,7 +24,7 @@ def set_password(password):
   p = password
   return p
 
-
+# This will set jarr(JSON Array) to the contents of the temporary blockchain. This is needed for other functions.
 def read_blockchain():
   with open("temp_blockchain.json", 'r', encoding='utf-8') as f:
     jsonarr = json.loads(f.read())
@@ -34,6 +34,7 @@ def read_blockchain():
 # Create the base block
 class Block:
 
+  # These will be the defining characteristics of the Block, which will be used later on.
   def __init__(self, index: int, timestamp: dt.date, data, previous_hash):
     self.index = index
     self.timestamp = timestamp
@@ -41,6 +42,7 @@ class Block:
     self.previous_hash = previous_hash
     self.hash = self.hash_block()
 
+  # This will be how we obtain the SHA256 Hash based on data.
   def hash_block(self):
     sha = hasher.sha256()
     new_index, new_timestamp, new_data, prev_hash = (str(
@@ -86,6 +88,7 @@ def create_next_block(last_block):
       int(input("How much would you like to send? ")),
   }
 
+  # User auth is needed for transfer
   password = input("In addition, what is your password? ")
   if new_data['amount'] > coins_amount:
     print("You don't have enough coins!")
@@ -97,8 +100,10 @@ def create_next_block(last_block):
     print("Not authorized user")
     print(new_data['from'] + " is not " + "the password.")
     exit()
+  # Setting the new hash
   new_hash = last_block.hash
 
+  # Adding a way to mine
   choice = input("Would you like to mine coins? [y/n]").lower()
   if choice == 'y':
     mine_add_block()
